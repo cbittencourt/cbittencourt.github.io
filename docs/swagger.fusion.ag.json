@@ -64,6 +64,11 @@
                         }
                     }
                 },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
                 "x-amazon-apigateway-integration" : {
                     "type" : "http",
                     "uri" : "https://${stageVariables.baseUrl}/tasklists",
@@ -187,6 +192,11 @@
                         }
                     }
                 },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
                 "x-amazon-apigateway-integration": {
                     "type": "http",
                     "uri": "https://${stageVariables.baseUrl}/tasklists",
@@ -311,6 +321,11 @@
                         }
                     }
                 },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
                 "x-amazon-apigateway-integration" : {
                     "type" : "http",
                     "uri" : "https://${stageVariables.baseUrl}/tasklists/{id}",
@@ -387,6 +402,11 @@
                         }
                     }
                 },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
                 "x-amazon-apigateway-integration" : {
                     "type" : "http",
                     "uri" : "https://${stageVariables.baseUrl}/tasklists/{id}",
@@ -431,6 +451,11 @@
                         }
                     }
                 },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
                 "x-amazon-apigateway-integration" : {
                     "type" : "http",
                     "uri" : "https://${stageVariables.baseUrl}/tasklists/{id}",
@@ -1810,6 +1835,13 @@
             "required": false,
             "type": "integer",
             "format": "int32"
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "x-api-key",
+            "in": "header"
         }
     },
     "definitions": {

@@ -1,0 +1,2489 @@
+﻿{
+    "swagger": "2.0",
+    "info": {
+        "description": "API definitions for AlertSense",
+        "version": "2.0.0",
+        "title": "AlertSense Public API",
+        "contact": {
+            "name": "AlertSense API Team",
+            "url": "https://admin.alertsense.com/api-docs/",
+            "email": "apis@alertsense.com"
+        }
+    },
+    "host": "api-2445581569902.staging.apicast.io:443",
+    "basePath": "/api",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/tasklists": {
+            "get": {
+                "tags": [
+                    "tasklists"
+                ],
+                "description": "Returns all tasklists from the system",
+                "operationId": "getTasklists",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "completed",
+                        "in": "query",
+                        "description": "Optional filter based on task completion. (?completed=true) or (?completed=false)",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "$ref": "#/parameters/page"
+                    },
+                    {
+                        "$ref": "#/parameters/pageSize"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "tasklist response",
+                        "schema": {
+                            "$ref": "#/definitions/pagedTasklistResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/tasklists",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "tasklists"
+                ],
+                "description": "Creates a new task in the system.  Duplicates are overwritten",
+                "operationId": "addTasklist",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "tasklist",
+                        "description": "Task to add to the system",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tasklist"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "tasklist response",
+                        "schema": {
+                            "$ref": "#/definitions/tasklist"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "items": [
+                                    {
+                                        "id": 456,
+                                        "title": "Pandemic Flu 497",
+                                        "assignmentTime": "2014-12-09T13:06:07.260+0000",
+                                        "assignor": "254",
+                                        "assignees": [
+                                            "777",
+                                            "888"
+                                        ],
+                                        "completed": false,
+                                        "tasks": {
+                                            "items": [
+                                                {
+                                                    "sequence": 1,
+                                                    "title": "London Fire - Call Fire Department",
+                                                    "description": "Push the buttons on the phone until the fire department phone starts ringing, then talk to them.",
+                                                    "completed": true,
+                                                    "deferred": false,
+                                                    "activities": {
+                                                        "items": [
+                                                            {
+                                                                "timestamp": "2014-12-09T13:06:08.260+0000",
+                                                                "comment": "Lorum ipsum",
+                                                                "activityType": "completed",
+                                                                "assignee": "777"
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "sequence": 2,
+                                                    "title": "Implement Viral Outbrak Policy and Proceedures",
+                                                    "description": "Run really fast",
+                                                    "completed": false,
+                                                    "deferred": true,
+                                                    "activities": {
+                                                        "items": [
+                                                            {
+                                                                "timestamp": "2014-12-09T13:06:08.260+0000",
+                                                                "comment": "No worries",
+                                                                "activityType": "deferred",
+                                                                "assignee": "888"
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "sequence": 3,
+                                                    "title": "Activate Site Crisis Team",
+                                                    "description": "Run really fast",
+                                                    "completed": false,
+                                                    "deferred": true,
+                                                    "activities": {
+                                                        "items": [
+                                                            {
+                                                                "timestamp": "2014-12-09T13:06:08.260+0000",
+                                                                "comment": "No worries",
+                                                                "activityType": "deferred",
+                                                                "assignee": "888"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "http",
+                    "uri": "https://${stageVariables.baseUrl}/tasklists",
+                    "httpMethod": "POST",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasklists/{id}": {
+            "get": {
+                "tags": [
+                    "tasklists"
+                ],
+                "description": "Returns a task definition based on a single ID",
+                "operationId": "findTasklistById",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of task to fetch",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "tasklist response",
+                        "schema": {
+                            "$ref": "#/definitions/tasklist"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "items": [
+                                    {
+                                        "id": 456,
+                                        "title": "Pandemic Flu 497",
+                                        "assignmentTime": "2014-12-09T13:06:07.260+0000",
+                                        "assignor": "254",
+                                        "assignees": [
+                                            "777",
+                                            "888"
+                                        ],
+                                        "completed": false,
+                                        "tasks": {
+                                            "items": [
+                                                {
+                                                    "sequence": 1,
+                                                    "title": "London Fire - Call Fire Department",
+                                                    "description": "Push the buttons on the phone until the fire department phone starts ringing, then talk to them.",
+                                                    "completed": true,
+                                                    "deferred": false,
+                                                    "activities": {
+                                                        "items": [
+                                                            {
+                                                                "timestamp": "2014-12-09T13:06:08.260+0000",
+                                                                "comment": "Lorum ipsum",
+                                                                "activityType": "completed",
+                                                                "assignee": "777"
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "sequence": 2,
+                                                    "title": "Implement Viral Outbrak Policy and Proceedures",
+                                                    "description": "Run really fast",
+                                                    "completed": false,
+                                                    "deferred": true,
+                                                    "activities": {
+                                                        "items": [
+                                                            {
+                                                                "timestamp": "2014-12-09T13:06:08.260+0000",
+                                                                "comment": "No worries",
+                                                                "activityType": "deferred",
+                                                                "assignee": "888"
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "sequence": 3,
+                                                    "title": "Activate Site Crisis Team",
+                                                    "description": "Run really fast",
+                                                    "completed": false,
+                                                    "deferred": true,
+                                                    "activities": {
+                                                        "items": [
+                                                            {
+                                                                "timestamp": "2014-12-09T13:06:08.260+0000",
+                                                                "comment": "No worries",
+                                                                "activityType": "deferred",
+                                                                "assignee": "888"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/tasklists/{id}",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "tasklists"
+                ],
+                "description": "updates a single tasklist based on the ID supplied",
+                "operationId": "updateTasklist",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of tasklist to update",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "body",
+                        "name": "updated tasklist",
+                        "description": "Required parameters for updating a tasklist.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tasklist"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": {
+                                    "isSuccess": true,
+                                    "errorCode": ""
+                                },
+                                "hasErrors": false,
+                                "isValid": false
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found.  No tasklist exists matching the provided Id.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": {
+                                    "isSuccess": false,
+                                    "errorCode": "NotFound"
+                                },
+                                "hasErrors": true,
+                                "isValid": false
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/tasklists/{id}",
+                    "httpMethod" : "PUT",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "tasklists"
+                ],
+                "description": "deletes a single tasklist based on the ID supplied",
+                "operationId": "deleteTasklist",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of tasklist to delete",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "tasklist deleted"
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/tasklists/{id}",
+                    "httpMethod" : "DELETE",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/incidents": {
+            "get": {
+                "operationId": "getIncidents",
+                "description": "Returns the incident types and named incidents defined in the region and associated to the current user.",
+                "tags": [
+                    "settings"
+                ],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "The type of incidents to retrieve.",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "Generic",
+                            "Named"
+                        ]
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success.",
+                        "schema": {
+                            "$ref": "#/definitions/pagedIncidentsResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "items": [
+                                    {
+                                        "id": "00f80df7-9e79-49ea-9e02-e265ea33ae40",
+                                        "name": "Infrastructure Failure/Damage",
+                                        "type": "Generic"
+                                    },
+                                    {
+                                        "id": "e03472cc9a3843d182986e01e1f02307",
+                                        "name": "Infrastructure Failure, Flooding, Miami",
+                                        "type": "Named"
+                                    }
+                                ],
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/incidents/{id}": {
+            "get": {
+                "operationId": "getIncidentById",
+                "description": "Returns the incident type or named incident selected by id.",
+                "tags": [
+                    "settings"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of the incident",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success.",
+                        "schema": {
+                            "$ref": "#/definitions/singleIncidentSettingsResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": {
+                                    "id": "00f80df7-9e79-49ea-9e02-e265ea33ae40",
+                                    "name": "Infrastructure Failure/Damage",
+                                    "type": "Generic"
+                                },
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/{id}",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/incidents/associationTypes": {
+            "get": {
+                "operationId": "getIncidentAssociationTypes",
+                "description": "Returns the set of supported incident-association keys, value types, and known values.",
+                "tags": [
+                    "settings"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success.",
+                        "schema": {
+                            "$ref": "#/definitions/pagedIncidentAssociationTypesResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "items": [
+                                    {
+                                        "key": "User.ExternalId",
+                                        "valueType": "String"
+                                    },
+                                    {
+                                        "key": "Asset.ExternalId",
+                                        "valueType": "String"
+                                    },
+                                    {
+                                        "key": "Asset.Area",
+                                        "valueType": "Set",
+                                        "setValues": "Europe;MEA (Middle East Africa);North America"
+                                    },
+                                    {
+                                        "key": "Asset.SubArea",
+                                        "valueType": "Set",
+                                        "setValues": "Western and Southern Europe;North Central Eastern Europe;Africa;Middle East;United Kingdom and Ireland;UNITED STATES;AUSTRALIA"
+                                    }
+                                ],
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/associationTypes",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/incidents/named": {
+            "get": {
+                "operationId": "getNamedIncidents",
+                "description": "Retrieve the named incidents.",
+                "tags": [
+                    "incidents"
+                ],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The page number of incidents to return. (1 by default)",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "description": "The desired number of incidents per page. (25 by default)",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/pagedNamedIncidentsResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "totalItemCount": 2,
+                                "pageCount": 1,
+                                "page": 1,
+                                "pageSize": 25,
+                                "items": [
+                                    {
+                                        "id": "2739107b-2af9-4289-a1b1-67b899092da6",
+                                        "name": "Paris Hilton Bomb Threat #11.11.2111",
+                                        "priority": "Emergency",
+                                        "incidentTypes": [
+                                            {
+                                                "id": "d1f5da077d1b470792bda718c6825717",
+                                                "name": "Bomb Threat",
+                                                "priority": "Emergency"
+                                            },
+                                            {
+                                                "id": "746b0fa74d97499fb75b33570eb2143e",
+                                                "name": "Attack/Major Violent Event",
+                                                "priority": "Emergency"
+                                            }
+                                        ],
+                                        "associations": [
+                                            {
+                                                "key": "Asset.ExternalId",
+                                                "values": [
+                                                    "856b0fa74d97499fb75b33570eb2143e",
+                                                    "966b0fa74d97476fb75b33570eb2154f"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "815427e0-681a-415a-8d2c-1908d0b95cbb",
+                                        "name": "Paris Hilton Bomb Threat #22.22.3222",
+                                        "priority": "Emergency",
+                                        "incidentTypes": [
+                                            {
+                                                "id": "d1f5da077d1b470792bda718c6825717",
+                                                "name": "Bomb Threat",
+                                                "priority": "Emergency"
+                                            }
+                                        ],
+                                        "associations": [
+                                            {
+                                                "key": "Asset.ExternalId",
+                                                "values": [
+                                                    "856b0fa74d97499fb75b33570eb2143e"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/named",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createNamedIncident",
+                "description": "Creates a named incident for an alert.",
+                "tags": [
+                    "incidents"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "namedIncident",
+                        "description": "Required parameters for creating a named incident.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namedIncident"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleNamedIncidentResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": {
+                                    "id": "5f779f74-b625-4061-8f0f-6fdf0d0316ce",
+                                    "name": "Boston Bomb Threat #11.11.1111",
+                                    "priority": "Emergency",
+                                    "incidentTypes": [
+                                        {
+                                            "id": "d1f5da07-7d1b-4707-92bd-a718c6825717",
+                                            "name": "Bomb Threat",
+                                            "priority": "Emergency"
+                                        }
+                                    ],
+                                    "associations": [
+                                        {
+                                            "key": "Asset.ExternalId",
+                                            "values": [
+                                                "d9c256ae-d323-4d97-a6fd-074b9d42c3ef",
+                                                "35303ac4-90f0-41c0-8f23-534ca2fa9791"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, likely due to validation errors.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/named",
+                    "httpMethod" : "POST",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/incidents/named/{id}": {
+            "get": {
+                "operationId": "getNamedIncident",
+                "description": "Retrieve a named incident.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The identifier of the desired named incident",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "tags": [
+                    "incidents"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleNamedIncidentResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": {
+                                    "id": "2739107b2af94289a1b167b899092da6",
+                                    "name": "Paris Hilton Bomb Threat #11.11.2111",
+                                    "priority": "Emergency",
+                                    "incidentTypes": [
+                                        {
+                                            "id": "d1f5da077d1b470792bda718c6825717",
+                                            "name": "Bomb Threat",
+                                            "priority": "Emergency"
+                                        },
+                                        {
+                                            "id": "746b0fa74d97499fb75b33570eb2143e",
+                                            "name": "Attack/Major Violent Event",
+                                            "priority": "Emergency"
+                                        }
+                                    ],
+                                    "associations": [
+                                        {
+                                            "key": "Asset.ExternalId",
+                                            "values": [
+                                                "856b0fa74d97499fb75b33570eb2143e",
+                                                "966b0fa74d97476fb75b33570eb2154f"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found.  No incident exists matching the provided Id.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": {
+                                    "isSuccess": false,
+                                    "errorCode": "NotFound"
+                                },
+                                "hasErrors": true,
+                                "isValid": false
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/named/{id}",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "operationId": "updateNamedIncident",
+                "description": "Updates a named incident.",
+                "tags": [
+                    "incidents"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of the named incident",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "incident",
+                        "description": "Required parameters for updating a named incident.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namedIncident"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleNamedIncidentResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": {
+                                    "id": "5f779f74-b625-4061-8f0f-6fdf0d0316ce",
+                                    "name": "Boston Bomb Threat #11.11.1111",
+                                    "priority": "Emergency",
+                                    "incidentTypes": [
+                                        {
+                                            "id": "d1f5da07-7d1b-4707-92bd-a718c6825717",
+                                            "name": "Bomb Threat",
+                                            "priority": "Emergency"
+                                        }
+                                    ],
+                                    "associations": [
+                                        {
+                                            "key": "Asset.ExternalId",
+                                            "values": [
+                                                "d9c256ae-d323-4d97-a6fd-074b9d42c3ef",
+                                                "35303ac4-90f0-41c0-8f23-534ca2fa9791",
+                                                "b18a4b85-cca3-4b6e-9ddd-e405948e9f24"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, likely due to validation errors.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found.  No incident exists matching the provided Id.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": {
+                                    "isSuccess": false,
+                                    "errorCode": "NotFound"
+                                },
+                                "hasErrors": true,
+                                "isValid": false
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/named/{id}",
+                    "httpMethod" : "PUT",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "deleteNamedIncident",
+                "description": "Delete a named incident.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The identifier of the named incident to delete.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "tags": [
+                    "incidents"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/named/{id}",
+                    "httpMethod" : "DELETE",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/incidents/generic": {
+            "get": {
+                "operationId": "getIncidentTypes",
+                "description": "Retrieve the incident types.",
+                "tags": [
+                    "incidents"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/pagedIncidentTypesResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "totalItemCount": 14,
+                                "pageCount": 1,
+                                "page": 1,
+                                "pageSize": 25,
+                                "items": [
+                                    {
+                                        "id": "746b0fa74d97499fb75b33570eb2143e",
+                                        "name": "Attack/Major Violent Event",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "d1f5da077d1b470792bda718c6825717",
+                                        "name": "Bomb Threat",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "cda88217754f4dcca6e85f837493df8f",
+                                        "name": "Criminal Activity",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "91f500a902354031b9758a9df9144048",
+                                        "name": "Outbreak of Disease/Illness",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "5b24d6e0e33246e6bdf6c3d6632b4209",
+                                        "name": "Fire or explosion",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "1d538a37c0de48f1a5d290e41877da03",
+                                        "name": "Hazardous Material Spillage/Leak",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "e03472cc9a3843d182986e01e1f02307",
+                                        "name": "Infrastructure Failure/Damage",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "05a4cab2a92e4e0f8f766c43fc136b1d",
+                                        "name": "Kidnap",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "dd0194d2c9f84ff8a054bc4f73a12775",
+                                        "name": "Death/Suicide",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "341b024d5cbb431cbe871dc8d8468c11",
+                                        "name": "Natural Disaster",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "aac5da41aaa84595b4af1bc6d98425bd",
+                                        "name": "Social/Political Unrest",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "19ba218a7e6841f18a2ba94e4c433aff",
+                                        "name": "Threat of Violence/Extortion",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "5fc103cc7bca4cad867f93aa6ef29367",
+                                        "name": "Transportation Emergency",
+                                        "priority": "Emergency"
+                                    },
+                                    {
+                                        "id": "0c7ae909b3d44d679bc97d4e34c80d20",
+                                        "name": "Other",
+                                        "priority": "Emergency"
+                                    }
+                                ],
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/generic",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createIncidentType",
+                "description": "Creates an incident type.",
+                "tags": [
+                    "incidents"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "incidentType",
+                        "description": "Required parameters for creating an incident type.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/incidentType"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleIncidentTypeResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": {
+                                    "id": "5f779f74-b625-4061-8f0f-6fdf0d0316ce",
+                                    "name": "Boston Bomb Threat #11.11.1111",
+                                    "priority": "Emergency"
+                                },
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, likely due to validation errors.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/generic",
+                    "httpMethod" : "POST",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/incidents/generic/{id}": {
+            "get": {
+                "operationId": "getIncidentType",
+                "description": "Retrieve an incident type.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The identifier of the desired incident type",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "tags": [
+                    "incidents"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleIncidentTypeResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": {
+                                    "id": "746b0fa74d97499fb75b33570eb2143e",
+                                    "name": "Attack/Major Violent Event",
+                                    "priority": "Emergency"
+                                },
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found.  No incident type exists with the given Id.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": {
+                                    "isSuccess": false,
+                                    "errorCode": "NotFound"
+                                },
+                                "hasErrors": true,
+                                "isValid": false
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/generic/{id}",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "operationId": "updateIncidentType",
+                "description": "Updates the incident type.",
+                "tags": [
+                    "incidents"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id of the incident type",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "incidentType",
+                        "description": "Required parameters for updating an incident type.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/incidentType"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleIncidentTypeResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": {
+                                    "id": "1fe96872-41bf-469e-b6bc-4dcc40bca579",
+                                    "name": "New Incident Type Example",
+                                    "priority": "Emergency"
+                                },
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, likely due to validation errors.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found.  No incident type exists matching the provided Id.",
+                        "schema": {
+                            "$ref": "#/definitions/apiResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "status": {
+                                    "isSuccess": false,
+                                    "errorCode": "NotFound"
+                                },
+                                "hasErrors": true,
+                                "isValid": false
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/generic/{id}",
+                    "httpMethod" : "PUT",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "deleteIncidentType",
+                "description": "Delete an incident type.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The identifier of the incident type to delete",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "tags": [
+                    "incidents"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    }
+                },
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/incidents/generic/{id}",
+                    "httpMethod" : "DELETE",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/settings/subscriptions": {
+            "get": {
+                "description": "Gets a paged list of `Subscription` objects.",
+                "operationId": "getSubscriptions",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/page"
+                    },
+                    {
+                        "$ref": "#/parameters/pageSize"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/pagedSubscriptionResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "totalItemCount": 2,
+                                "pageCount": 1,
+                                "page": 1,
+                                "pageSize": 25,
+                                "items": [
+                                    {
+                                        "id": "00f80df7-9e79-49ea-9e02-e265ea33ae40",
+                                        "uri": "https://dev.alertsense.com/hooks",
+                                        "secret": "Zw2'1*pDg8X(Sj)76Mr_Yn.5f3T-!z4A",
+                                        "security": {
+                                            "apiKey": "my-super-fancy-key",
+                                            "type": "apiKey"
+                                        },
+                                        "eventTypes": [
+                                            {
+                                                "id": "7a90a44e-74cd-499b-84f1-4e293b4e01fc",
+                                                "name": "alert.sent",
+                                                "description": "An alert was sent."
+                                            },
+                                            {
+                                                "id": "b5b586c4-26c1-49f8-a6de-e2ee01e84369",
+                                                "name": "namedIncident.created",
+                                                "description": "A named incident was created."
+                                            }
+                                        ],
+                                        "isActive": true,
+                                        "createdOn": "2016-12-09T13:06:08.260+0000",
+                                        "modifiedOn": "2016-12-10T10:27:31.260+0000"
+                                    },
+                                    {
+                                        "id": "1072a38d-b856-495b-8f78-48b08a143889",
+                                        "uri": "https://dev.alertsense.com/other-hooks",
+                                        "secret": "sX_73yP.W4'joS1-F5!q)m2KZ8*k0iT~",
+                                        "security": null,
+                                        "eventTypes": [
+                                            {
+                                                "id": "7a90a44e-74cd-499b-84f1-4e293b4e01fc",
+                                                "name": "alert.sent",
+                                                "description": "An alert was sent."
+                                            }
+                                        ],
+                                        "isActive": true,
+                                        "createdOn": "2016-11-14T19:06:08.260+0000",
+                                        "modifiedOn": "2016-12-03T16:27:31.260+0000"
+                                    }
+                                ],
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "subscriptions"
+                ],
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/settings/subscriptions",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new `Subscription` object.",
+                "operationId": "createSubscription",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "createSubscriptionRequest",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createSubscriptionRequest"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleSubscriptionResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "id": "00f80df7-9e79-49ea-9e02-e265ea33ae40",
+                                "uri": "https://dev.alertsense.com/hooks",
+                                "secret": "Zw2'1*pDg8X(Sj)76Mr_Yn.5f3T-!z4A",
+                                "security": {
+                                    "username": "john.q.user",
+                                    "type": "basic"
+                                },
+                                "eventTypes": [
+                                    {
+                                        "id": "7a90a44e-74cd-499b-84f1-4e293b4e01fc",
+                                        "name": "alert.sent",
+                                        "description": "An alert was sent."
+                                    },
+                                    {
+                                        "id": "b5b586c4-26c1-49f8-a6de-e2ee01e84369",
+                                        "name": "namedIncident.created",
+                                        "description": "A named incident was created."
+                                    }
+                                ],
+                                "isActive": true,
+                                "createdOn": "2016-12-09T13:06:08.260+0000",
+                                "modifiedOn": "2016-12-10T10:27:31.260+0000"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "subscriptions"
+                ],
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/settings/subscriptions",
+                    "httpMethod" : "POST",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/settings/subscriptions/{id}": {
+            "get": {
+                "description": "Gets a single `Subscription` object.",
+                "operationId": "getSubscription",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "",
+                        "required": true,
+                        "format": "guid",
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/singleSubscriptionResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "item": [
+                                    {
+                                        "id": "00f80df7-9e79-49ea-9e02-e265ea33ae40",
+                                        "uri": "https://dev.alertsense.com/hooks",
+                                        "secret": "Zw2'1*pDg8X(Sj)76Mr_Yn.5f3T-!z4A",
+                                        "security": {
+                                            "headers": {
+                                                "X-Client-Id": "my-client-id",
+                                                "X-Client-Token": "my-client-token"
+                                            },
+                                            "type": "header"
+                                        },
+                                        "eventTypes": [
+                                            {
+                                                "id": "7a90a44e-74cd-499b-84f1-4e293b4e01fc",
+                                                "name": "alert.sent",
+                                                "description": "An alert was sent."
+                                            },
+                                            {
+                                                "id": "b5b586c4-26c1-49f8-a6de-e2ee01e84369",
+                                                "name": "namedIncident.created",
+                                                "description": "A named incident was created."
+                                            }
+                                        ],
+                                        "isActive": true,
+                                        "createdOn": "2016-12-09T13:06:08.260+0000",
+                                        "modifiedOn": "2016-12-10T10:27:31.260+0000"
+                                    }
+                                ],
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "subscriptions"
+                ],
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/settings/subscriptions/{id}",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing `Subscription` object.",
+                "operationId": "updateSubscription",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "",
+                        "required": true,
+                        "format": "guid",
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "updateSubscriptionRequest",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateSubscriptionRequest"
+                        }
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    }
+                },
+                "tags": [
+                    "subscriptions"
+                ],
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/settings/subscriptions/{id}",
+                    "httpMethod" : "PUT",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete an existing `Subscription` object.",
+                "operationId": "deleteSubscription",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "",
+                        "required": true,
+                        "format": "guid",
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    }
+                },
+                "tags": [
+                    "subscriptions"
+                ],
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/settings/subscriptions/{id}",
+                    "httpMethod" : "DELETE",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/settings/subscriptions/eventTypes": {
+            "get": {
+                "description": "Gets a paged list of `EventType` objects.",
+                "operationId": "getEventTypes",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/page"
+                    },
+                    {
+                        "$ref": "#/parameters/pageSize"
+                    },
+                    {
+                        "$ref": "#/parameters/authentication"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/pagedEventTypesResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "totalItemCount": 2,
+                                "pageCount": 1,
+                                "page": 1,
+                                "pageSize": 25,
+                                "items": [
+                                    {
+                                        "id": "7a90a44e-74cd-499b-84f1-4e293b4e01fc",
+                                        "name": "alert.sent",
+                                        "description": "An alert was sent."
+                                    },
+                                    {
+                                        "id": "b5b586c4-26c1-49f8-a6de-e2ee01e84369",
+                                        "name": "namedIncident.created",
+                                        "description": "A named incident was created."
+                                    }
+                                ],
+                                "hasErrors": false,
+                                "isValid": true
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "subscriptions"
+                ],
+                "x-amazon-apigateway-integration" : {
+                    "type" : "http",
+                    "uri" : "https://${stageVariables.baseUrl}/v2/settings/subscriptions/eventTypes",
+                    "httpMethod" : "GET",
+                    "requestParameters": {
+                        "integration.request.header.user_key": "method.request.header.x-api-key"
+                    },
+                    "responses": {
+                        "-": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "parameters": {
+        "authentication": {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API user key",
+            "required": true,
+            "type": "string"
+        },
+        "page": {
+            "name": "page",
+            "in": "query",
+            "description": "The page number of items to return. (1 by default)",
+            "required": false,
+            "default": 1,
+            "type": "integer",
+            "format": "int32"
+        },
+        "pageSize": {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The desired number of items per page. (25 by default)",
+            "default": 25,
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+        }
+    },
+    "definitions": {
+        "apiResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/responseStatus"
+                },
+                "hasErrors": {
+                    "type": "boolean",
+                    "description": "Set true when status.isSuccess is false."
+                },
+                "isValid": {
+                    "type": "boolean",
+                    "description": "Set false on API parameter validation failures."
+                }
+            }
+        },
+        "eventType": {
+            "description": "A type of event that can be subscribed to.",
+            "properties": {
+                "id": {
+                    "format": "guid",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "responseStatus": {
+            "type": "object",
+            "properties": {
+                "resourceKey": {
+                    "type": "string"
+                },
+                "isSuccess": {
+                    "type": "boolean",
+                    "description": "False when errorCode is not None or there is an errorMessage or validationFailures."
+                },
+                "errorCode": {
+                    "type": "string"
+                },
+                "errorMessage": {
+                    "type": "string"
+                },
+                "validationFailures": {
+                    "type": "array",
+                    "description": "API parameter validation failures.",
+                    "items": {
+                        "$ref": "#/definitions/validationFailure"
+                    }
+                }
+            }
+        },
+        "validationFailure": {
+            "type": "object",
+            "properties": {
+                "propertyName": {
+                    "type": "string"
+                },
+                "errorMessage": {
+                    "type": "string"
+                },
+                "errorCode": {
+                    "type": "string"
+                },
+                "attemptedValue": {
+                    "type": "object",
+                    "properties": {}
+                },
+                "resourceKey": {
+                    "type": "string"
+                }
+            }
+        },
+        "createSubscriptionRequest": {
+            "properties": {
+                "uri": {
+                    "description": "The URI of the resource to send the web hook to",
+                    "format": "url",
+                    "type": "string"
+                },
+                "secret": {
+                    "description": "The secret key that will be used when generating the request signature.  If left blank, requests will not be signed.",
+                    "type": "string"
+                },
+                "security": {
+                    "$ref": "#/definitions/subscriptionSecurity"
+                },
+                "eventTypes": {
+                    "items": {
+                        "$ref": "#/definitions/eventType"
+                    },
+                    "type": "array"
+                },
+                "isActive": {
+                    "description": "Whether the subscription is currently active or not",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "incidentAssociationType": {
+            "description": "Defines key/value pairs permitted in an incident association.",
+            "required": [
+                "key",
+                "valueType"
+            ],
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "valueType": {
+                    "type": "string",
+                    "enum": [
+                        "String",
+                        "Set",
+                        "Point",
+                        "Number",
+                        "Date"
+                    ]
+                },
+                "setValues": {
+                    "type": "string",
+                    "description": "A semicolon separated list of values permitted in the set."
+                }
+            },
+            "type": "object"
+        },
+        "incidentAssociation": {
+            "description": "Defines associations between the incident and other entities. Supported key values include Asset.ExternalId, Area, Subarea.",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "values": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "namedIncident": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Type: Guid. Identifier for this incident."
+                },
+                "name": {
+                    "type": "string"
+                },
+                "priority": {
+                    "$ref": "#/definitions/incidentPriority"
+                },
+                "incidentTypes": {
+                    "items": {
+                        "$ref": "#/definitions/incidentType"
+                    },
+                    "type": "array"
+                },
+                "associations": {
+                    "items": {
+                        "$ref": "#/definitions/incidentAssociation"
+                    },
+                    "type": "array"
+                },
+                "externalId": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "incidentPriority": {
+            "enum": [
+                "Emergency",
+                "NonEmergency",
+                "NotSpecified"
+            ],
+            "type": "string"
+        },
+        "incidentSettings": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Type: Guid. Identifier for this incident."
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/incidentSettingsType"
+                }
+            },
+            "type": "object"
+        },
+        "incidentSettingsType": {
+            "enum": [
+                "Generic",
+                "Named"
+            ],
+            "type": "string"
+        },
+        "incidentType": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Type: Guid. Identifier for this incident type."
+                },
+                "name": {
+                    "type": "string"
+                },
+                "priority": {
+                    "$ref": "#/definitions/incidentPriority"
+                },
+                "externalId": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "pagedApiResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/apiResponse"
+                },
+                {
+                    "properties": {
+                        "page": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "pageCount": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "pageSize": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "totalItemCount": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                }
+            ]
+        },
+        "pagedEventTypesResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/pagedApiResponse"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/eventType"
+                            }
+                        }
+                    }
+                }
+            ],
+            "type": "object"
+        },
+        "pagedIncidentsResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/pagedApiResponse"
+                },
+                {
+                    "properties": {
+                        "items": {
+                            "items": {
+                                "$ref": "#/definitions/incidentSettings"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                }
+            ],
+            "type": "object"
+        },
+        "pagedIncidentAssociationTypesResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/pagedApiResponse"
+                },
+                {
+                    "properties": {
+                        "items": {
+                            "items": {
+                                "$ref": "#/definitions/incidentAssociationType"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                }
+            ],
+            "type": "object"
+        },
+        "pagedNamedIncidentsResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/pagedApiResponse"
+                },
+                {
+                    "properties": {
+                        "items": {
+                            "items": {
+                                "$ref": "#/definitions/namedIncident"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                }
+            ],
+            "type": "object"
+        },
+        "pagedIncidentTypesResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/pagedApiResponse"
+                },
+                {
+                    "properties": {
+                        "items": {
+                            "items": {
+                                "$ref": "#/definitions/incidentType"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                }
+            ],
+            "type": "object"
+        },
+        "singleIncidentSettingsResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/apiResponse"
+                },
+                {
+                    "properties": {
+                        "item": {
+                            "$ref": "#/definitions/incidentSettings"
+                        }
+                    }
+                }
+            ],
+            "type": "object"
+        },
+        "singleNamedIncidentResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/apiResponse"
+                },
+                {
+                    "properties": {
+                        "item": {
+                            "$ref": "#/definitions/namedIncident"
+                        }
+                    }
+                }
+            ],
+            "type": "object"
+        },
+        "singleIncidentTypeResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/apiResponse"
+                },
+                {
+                    "properties": {
+                        "item": {
+                            "$ref": "#/definitions/incidentType"
+                        }
+                    }
+                }
+            ],
+            "type": "object"
+        },
+        "errorModel": {
+            "type": "object",
+            "required": [
+                "code",
+                "message"
+            ],
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "pagedSubscriptionResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/pagedApiResponse"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/subscription"
+                            }
+                        }
+                    }
+                }
+            ],
+            "type": "object"
+        },
+        "pagedTasklistResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/pagedApiResponse"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/tasklist"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "singleSubscriptionResponse": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/apiResponse"
+                },
+                {
+                    "properties": {
+                        "item": {
+                            "$ref": "#/definitions/subscription"
+                        }
+                    }
+                }
+            ],
+            "type": "object"
+        },
+        "subscription": {
+            "description": "A subscription to a web hook event.",
+            "properties": {
+                "id": {
+                    "description": "The Id of the subscription",
+                    "format": "guid",
+                    "type": "string"
+                },
+                "uri": {
+                    "description": "The URI of the resource to send the web hook to",
+                    "format": "url",
+                    "type": "string"
+                },
+                "secret": {
+                    "description": "The secret key that will be used when generating the request signature",
+                    "type": "string"
+                },
+                "security": {
+                    "$ref": "#/definitions/subscriptionSecurity"
+                },
+                "eventTypes": {
+                    "items": {
+                        "$ref": "#/definitions/eventType"
+                    },
+                    "type": "array"
+                },
+                "isActive": {
+                    "description": "Whether the subscription is currently active or not",
+                    "type": "boolean"
+                },
+                "createdOn": {
+                    "description": "The datetime the subscription was created",
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "modifiedOn": {
+                    "description": "The datetime the subscription was last modified",
+                    "format": "date-time",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "subscriptionSecurity": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "header",
+                        "apiKey",
+                        "basic",
+                        "oauth2"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "tasklist": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "the ID of the tasklist"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "the title of the tasklist"
+                },
+                "assignmentTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "what time the task was assigned by the task management system"
+                },
+                "assignor": {
+                    "type": "string",
+                    "description": "The user ID of the person assigning the task.  \nThe assignor will see the tasklist and will be able to see updates to the task model.\nNote, the ID here must match in both the external system and AlertSense\n",
+                    "default": "254"
+                },
+                "assignees": {
+                    "type": "array",
+                    "description": "The collection of users who are assigned the tasklist.  \nAll of these users will see the tasks as \\\"to-do\\\".\nNote - the id in these asignee (user) records must match in both the \nexternal system and AlertSense, so user IDs must be synchronized between \nthe two systems.\n",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "completed": {
+                    "type": "boolean",
+                    "description": "true if the entire tasklist has been completed",
+                    "default": false
+                },
+                "tasks": {
+                    "type": "array",
+                    "description": "The collection of tasks that have been assigned.",
+                    "items": {
+                        "$ref": "#/definitions/task"
+                    }
+                }
+            },
+            "description": "A collection of tasks assigned to a collection of assignees by an assignor.  AlertSense will manage this model as assignees act on the task list, providing updates via webhooks."
+        },
+        "task": {
+            "type": "object",
+            "required": [
+                "activities",
+                "completed",
+                "deferred",
+                "sequence",
+                "title"
+            ],
+            "properties": {
+                "sequence": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "the order of this task in the list"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "title of the task - short name"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "more detailed instructions for the task"
+                },
+                "completed": {
+                    "type": "boolean",
+                    "description": "true if the task has been completed",
+                    "default": false
+                },
+                "deferred": {
+                    "type": "boolean",
+                    "description": "true if the task has been deferred",
+                    "default": false
+                },
+                "activities": {
+                    "type": "array",
+                    "description": "Collection of activities associated with this task",
+                    "items": {
+                        "$ref": "#/definitions/taskActivity"
+                    }
+                }
+            },
+            "description": "a task in the tasklist"
+        },
+        "taskActivity": {
+            "type": "object",
+            "required": [
+                "activityType",
+                "assignee",
+                "timestamp"
+            ],
+            "properties": {
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "what time the activity happened"
+                },
+                "assignee": {
+                    "type": "string",
+                    "description": "The assignee who did the activity",
+                    "default": "545"
+                },
+                "activityType": {
+                    "type": "string",
+                    "enum": [
+                        "completed",
+                        "deferred",
+                        "commented"
+                    ]
+                },
+                "comment": {
+                    "type": "string",
+                    "description": "optional comment by an assignee"
+                }
+            },
+            "description": "Activity logged against an assigned task"
+        },
+        "updateSubscriptionRequest": {
+            "properties": {
+                "id": {
+                    "description": "The Id of the web hook to update",
+                    "format": "guid",
+                    "type": "string"
+                },
+                "uri": {
+                    "description": "The URI of the resource to send the web hook to",
+                    "format": "url",
+                    "type": "string"
+                },
+                "secret": {
+                    "description": "The secret key that will be used when generating the request signature.  If left blank, requests will not be signed.",
+                    "type": "string"
+                },
+                "security": {
+                    "$ref": "#/definitions/subscriptionSecurity"
+                },
+                "eventTypes": {
+                    "items": {
+                        "$ref": "#/definitions/eventType"
+                    },
+                    "type": "array"
+                },
+                "isActive": {
+                    "description": "Whether the subscription is currently active or not",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        }
+    }
+}
